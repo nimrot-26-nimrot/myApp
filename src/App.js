@@ -170,7 +170,8 @@ function App() {
           />
           {errors.whatsapp && <p className="error">{errors.whatsapp}</p>}
         </div>
-
+        {/* Submit Button */}
+        <button type="submit">Tell Us More</button>
         {/* Purpose */}
         <div className="form-group">
           <label>Purpose</label>
@@ -207,8 +208,7 @@ function App() {
           {errors.email && <p className="error">{errors.email}</p>}
         </div>
 
-        {/* Submit Button */}
-        <button type="submit">Tell Us More</button>
+        
       </form>
 
       {/* WhatsApp Button */}
