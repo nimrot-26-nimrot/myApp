@@ -16,16 +16,67 @@ function App() {
     email: "zubair.saddam@gmail.com",
   });
 
+  // State to store errors
+  const [errors, setErrors] = useState({});
+
   // Update state on input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Validate form fields
+  const validate = () => {
+    const newErrors = {};
+
+    if (!formData.destination.trim()) {
+      newErrors.destination = "Destination is required.";
+    }
+
+    if (!formData.from.trim()) {
+      newErrors.from = "From location is required.";
+    }
+
+    if (!formData.date) {
+      newErrors.date = "Travel date is required.";
+    } else if (new Date(formData.date) < new Date()) {
+      newErrors.date = "Travel date cannot be in the past.";
+    }
+
+    if (!formData.days || formData.days < 1) {
+      newErrors.days = "Number of days must be at least 1.";
+    }
+
+    if (!formData.people || formData.people < 1) {
+      newErrors.people = "Number of people must be at least 1.";
+    }
+
+    if (!formData.whatsapp.trim()) {
+      newErrors.whatsapp = "WhatsApp number is required.";
+    } else if (!/^\d{10}$/.test(formData.whatsapp)) {
+      newErrors.whatsapp = "WhatsApp number must be 10 digits.";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Invalid email address.";
+    }
+
+    if (!formData.details.trim()) {
+      newErrors.details = "Details are required.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('Form submitted successfully!');
-    console.log(formData);
+    if (validate()) {
+      alert("Form submitted successfully!");
+      console.log(formData);
+    }
   };
 
   return (
@@ -41,8 +92,8 @@ function App() {
             value={formData.destination}
             onChange={handleChange}
             placeholder="Enter Destination"
-            required
           />
+          {errors.destination && <p className="error">{errors.destination}</p>}
         </div>
 
         {/* From */}
@@ -55,6 +106,7 @@ function App() {
             onChange={handleChange}
             placeholder="Enter From Location"
           />
+          {errors.from && <p className="error">{errors.from}</p>}
         </div>
 
         {/* Date */}
@@ -66,6 +118,7 @@ function App() {
             value={formData.date}
             onChange={handleChange}
           />
+          {errors.date && <p className="error">{errors.date}</p>}
         </div>
 
         {/* Days */}
@@ -78,6 +131,7 @@ function App() {
             onChange={handleChange}
             min="1"
           />
+          {errors.days && <p className="error">{errors.days}</p>}
         </div>
 
         {/* Travel Mode */}
@@ -101,6 +155,7 @@ function App() {
             onChange={handleChange}
             min="1"
           />
+          {errors.people && <p className="error">{errors.people}</p>}
         </div>
 
         {/* WhatsApp Number */}
@@ -113,9 +168,8 @@ function App() {
             onChange={handleChange}
             placeholder="Enter WhatsApp Number"
           />
+          {errors.whatsapp && <p className="error">{errors.whatsapp}</p>}
         </div>
-
-        <button type="submit">Tell Us More</button>
 
         {/* Purpose */}
         <div className="form-group">
@@ -137,6 +191,7 @@ function App() {
             onChange={handleChange}
             rows="4"
           ></textarea>
+          {errors.details && <p className="error">{errors.details}</p>}
         </div>
 
         {/* Email */}
@@ -149,10 +204,11 @@ function App() {
             onChange={handleChange}
             placeholder="Enter Email ID"
           />
+          {errors.email && <p className="error">{errors.email}</p>}
         </div>
 
         {/* Submit Button */}
-        
+        <button type="submit">Tell Us More</button>
       </form>
 
       {/* WhatsApp Button */}
